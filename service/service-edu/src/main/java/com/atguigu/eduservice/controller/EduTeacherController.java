@@ -4,13 +4,17 @@ package com.atguigu.eduservice.controller;
 import com.atguigu.commonutils.R;
 import com.atguigu.eduservice.entity.EduTeacher;
 import com.atguigu.eduservice.service.EduTeacherService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -50,13 +54,26 @@ public class EduTeacherController {
 
     }
 
-//   添加教师
-    @PostMapping("addTeacher")
-    public Object addTeacher(@RequestBody Object data){
-       teacherService.save((EduTeacher) data);
+    @ApiOperation(value ="讲师分页" )
+    @GetMapping("pageTeacher")
+    public R pageListTeacher(@RequestParam long current,@RequestParam long limit){
 
-       return true;
+
+        //创建page对象
+        Page<EduTeacher> pageTeacher = new Page<>(current,limit);
+
+        //调用方法实现分页
+        //调用方法时，底层封装把分页所有数据封装到pageTeacher里面
+        teacherService.page(pageTeacher,null);
+        long total = pageTeacher.getTotal();//总记录数
+        List<EduTeacher> records = pageTeacher.getRecords();//数据list集合
+        Map map = new HashMap();
+        map.put("total",total);
+        map.put("records",records);
+        return R.ok().data(map);
     }
+
+
 
 
 
