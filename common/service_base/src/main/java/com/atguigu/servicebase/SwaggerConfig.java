@@ -14,6 +14,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration//配置类
 @EnableSwagger2 //swagger注解
 public class SwaggerConfig {
+    public static final String TAG_1 = "tag1";
+    public static final String TAG_2 = "tag2";
+    public static final String TAG_3 = "tag3";
 
     @Bean
     public Docket webApiConfig(){
